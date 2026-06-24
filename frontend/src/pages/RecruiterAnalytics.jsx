@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import TopNavbar from '../components/TopNavbar';
 import PageHeader from '../components/common/PageHeader';
 import RecruiterSidebar from '../components/recruiter/RecruiterSidebar';
+import AppShell from '../components/layout/AppShell';
 import { mockRecruiterAnalytics } from '../mocks/recruiterAnalytics';
 
 // Sub-components
@@ -29,10 +30,7 @@ const RecruiterAnalytics = () => {
     } = mockRecruiterAnalytics;
 
     return (
-        <div className="flex bg-slate-50 min-h-screen">
-            <RecruiterSidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<RecruiterSidebar />} className="bg-slate-50">
                  <header className="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 relative z-20">
                     <div className="flex items-center gap-4">
                         <PageHeader title="Talent Intelligence & Analytics" />
@@ -103,8 +101,7 @@ const RecruiterAnalytics = () => {
                         </button>
                     </div>
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

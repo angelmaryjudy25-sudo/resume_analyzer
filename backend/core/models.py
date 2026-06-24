@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+    # Only 'recruiter' is used for registration; 'candidate' kept for legacy data only
     ROLE_CHOICES = (
         ('recruiter', 'Recruiter'),
-        ('candidate', 'Candidate'),
     )
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='recruiter')
     company_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
@@ -18,7 +18,15 @@ class Resume(models.Model):
         ('parsed', 'Parsed'),
         ('failed', 'Failed'),
     )
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resumes')
+    # owner is nullable — candidate resumes have no account, recruiter-linked
+    # resumes (uploaded on behalf of a candidate) set this to the recruiter.
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='resumes',
+        null=True,
+        blank=True,
+    )
     file = models.FileField(upload_to='resumes/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     parsed_skills = models.JSONField(blank=True, null=True)
@@ -29,7 +37,9 @@ class Resume(models.Model):
     parse_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
     def __str__(self):
-        return f"Resume of {self.owner.username} - {self.parse_status}"
+        if self.owner:
+            return f"Resume of {self.owner.username} - {self.parse_status}"
+        return f"Anonymous Resume #{self.pk} - {self.parse_status}"
 
 class JobDescription(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobs')
@@ -53,4 +63,5 @@ class Match(models.Model):
     computed_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"Match: {self.resume.owner.username} for {self.job.title} - {self.match_percentage}%"
+        owner_name = self.resume.owner.username if self.resume.owner else "Anonymous"
+        return f"Match: {owner_name} for {self.job.title} - {self.match_percentage}%"

@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { ShieldCheck, Mail, Lock, LogIn } from 'lucide-react';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const { login, user, authInitialized } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (authInitialized && user) {
+            const destination = user.role === 'admin'
+                ? '/admin/dashboard'
+                : '/recruiter/dashboard';
+            navigate(destination, { replace: true });
+        }
+    }, [authInitialized, user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await login(username, password);
-            navigate('/');
+            const profile = await login(username, password);
+            const defaultDestination = profile.role === 'admin'
+                ? '/admin/dashboard'
+                : '/recruiter/dashboard';
+            navigate(location.state?.from || defaultDestination);
         } catch (err) {
             setError('Invalid credentials');
         }
@@ -82,6 +95,10 @@ const Login = () => {
 
                 <p className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
                     Don't have an account? <Link to="/register" className="text-primary hover:underline ml-1">Register</Link>
+                </p>
+                <p className="mt-4 text-center text-xs text-slate-600">
+                    Looking to analyze your resume?{' '}
+                    <Link to="/candidate/job-match" className="text-cyan-400 hover:underline">Start as a candidate</Link>
                 </p>
             </div>
         </div>

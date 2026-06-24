@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { User, Briefcase } from 'lucide-react';
 
 const Landing = () => {
     return (
@@ -18,13 +19,24 @@ const Landing = () => {
                     match with ideal jobs, and follow a personalized roadmap to success.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
-                    <Link to="/register" className="btn-saas bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 text-lg">
-                        Get Started for Free
+                    <Link
+                        to="/candidate/job-match"
+                        className="btn-saas bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 text-lg flex items-center gap-2"
+                    >
+                        <User size={20} />
+                        I'm a Candidate
                     </Link>
-                    <Link to="/login" className="btn-saas border border-slate-700 hover:bg-slate-800 text-slate-200 px-8 py-4 text-lg">
-                        Login to Dashboard
+                    <Link
+                        to="/login"
+                        className="btn-saas border border-slate-700 hover:bg-slate-800 text-slate-200 px-8 py-4 text-lg flex items-center gap-2"
+                    >
+                        <Briefcase size={20} />
+                        I'm Hiring
                     </Link>
                 </div>
+                <p className="mt-6 text-slate-500 text-sm">
+                    Candidates start instantly — no account required.
+                </p>
             </motion.div>
             
             <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">

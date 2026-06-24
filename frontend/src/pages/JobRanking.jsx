@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import AppShell from '../components/layout/AppShell';
 import TopNavbar from '../components/TopNavbar';
 import PageHeader from '../components/common/PageHeader';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
@@ -35,10 +36,7 @@ const JobRanking = () => {
     };
 
     return (
-        <div className="flex bg-background min-h-screen">
-            <Sidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<Sidebar />}>
                 <TopNavbar />
 
                 <main className="flex-1 overflow-y-auto p-4 md:p-8">
@@ -112,8 +110,7 @@ const JobRanking = () => {
 
                     </div>
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

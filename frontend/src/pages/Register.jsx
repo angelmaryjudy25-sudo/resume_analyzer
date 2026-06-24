@@ -8,7 +8,6 @@ const Register = () => {
         username: '',
         email: '',
         password: '',
-        role: 'candidate',
         company_name: ''
     });
     const { register, login } = useAuth();
@@ -18,11 +17,23 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(formData);
+            await register({ ...formData, role: 'recruiter' });
             await login(formData.username, formData.password);
-            navigate('/');
+            navigate('/recruiter/dashboard');
         } catch (err) {
-            setError(err?.response?.data?.message || 'Registration failed. Try another username.');
+            const data = err?.response?.data;
+            if (data && typeof data === 'object') {
+                // DRF returns field errors as { field: ['msg', ...], ... }
+                const messages = Object.entries(data)
+                    .map(([field, msgs]) => {
+                        const text = Array.isArray(msgs) ? msgs.join(' ') : String(msgs);
+                        return field === 'non_field_errors' ? text : `${field}: ${text}`;
+                    })
+                    .join('  |  ');
+                setError(messages || 'Registration failed.');
+            } else {
+                setError(err?.message || 'Network error — is the backend running?');
+            }
         }
     };
 
@@ -37,8 +48,8 @@ const Register = () => {
                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4 border border-primary/20">
                         <ShieldCheck size={24} />
                     </div>
-                    <h2 className="text-2xl font-black text-white tracking-tight">Create Account</h2>
-                    <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest font-black">Join Resume AI Platform</p>
+                    <h2 className="text-2xl font-black text-white tracking-tight">Create Recruiter Account</h2>
+                    <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest font-black">Hiring teams only</p>
                 </div>
 
                 {error && (
@@ -93,44 +104,34 @@ const Register = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="block text-xs font-black text-slate-300 uppercase tracking-widest">I am a...</label>
-                        <select 
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none"
-                            value={formData.role} 
-                            onChange={e => setFormData({...formData, role: e.target.value})}
-                        >
-                            <option value="candidate" className="bg-slate-950 text-white">Candidate</option>
-                            <option value="recruiter" className="bg-slate-950 text-white">Recruiter</option>
-                        </select>
-                    </div>
-
-                    {formData.role === 'recruiter' && (
-                        <div className="space-y-2">
-                            <label className="block text-xs font-black text-slate-300 uppercase tracking-widest">Company Name</label>
-                            <div className="relative">
-                                <Briefcase size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-                                <input 
-                                    className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-slate-500 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none" 
-                                    placeholder="Enter your company name"
-                                    value={formData.company_name} 
-                                    onChange={e => setFormData({...formData, company_name: e.target.value})} 
-                                    required 
-                                />
-                            </div>
+                        <label className="block text-xs font-black text-slate-300 uppercase tracking-widest">Company Name</label>
+                        <div className="relative">
+                            <Briefcase size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                            <input 
+                                className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-slate-500 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none" 
+                                placeholder="Enter your company name"
+                                value={formData.company_name} 
+                                onChange={e => setFormData({...formData, company_name: e.target.value})} 
+                                required 
+                            />
                         </div>
-                    )}
+                    </div>
 
                     <button 
                         type="submit"
                         className="w-full btn-saas bg-primary hover:bg-primary/90 text-white py-3 text-sm font-black flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
                     >
                         <UserPlus size={16} />
-                        Create Free Account
+                        Create Recruiter Account
                     </button>
                 </form>
 
                 <p className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
                     Already have an account? <Link to="/login" className="text-primary hover:underline ml-1">Login</Link>
+                </p>
+                <p className="mt-4 text-center text-xs text-slate-600">
+                    Looking to analyze your resume?{' '}
+                    <Link to="/candidate/job-match" className="text-cyan-400 hover:underline">Start as a candidate</Link>
                 </p>
             </div>
         </div>

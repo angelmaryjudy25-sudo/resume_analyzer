@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import AppShell from '../components/layout/AppShell';
 import TopNavbar from '../components/TopNavbar';
 import PageHeader from '../components/common/PageHeader';
 import StatCard from '../components/common/StatCard';
@@ -86,21 +87,15 @@ const ResumeAnalysis = () => {
 
     if (loading) {
         return (
-            <div className="flex bg-background min-h-screen">
-                <Sidebar />
-                <div className="flex-1 flex flex-col">
-                    <TopNavbar />
-                    <div className="p-8"><LoadingSkeleton type="card" count={4} /></div>
-                </div>
-            </div>
+            <AppShell sidebar={<Sidebar />}>
+                <TopNavbar />
+                <div className="p-8"><LoadingSkeleton type="card" count={4} /></div>
+            </AppShell>
         );
     }
 
     return (
-        <div className="flex bg-background min-h-screen">
-            <Sidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<Sidebar />}>
                 <TopNavbar />
 
                 <main className="flex-1 overflow-y-auto p-4 md:p-8">
@@ -269,8 +264,7 @@ const ResumeAnalysis = () => {
 
                     </div>
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

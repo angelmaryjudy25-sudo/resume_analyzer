@@ -21,7 +21,7 @@ const AdminSidebar = () => {
     ];
 
     return (
-        <aside className="w-64 bg-slate-950 min-h-screen flex flex-col text-slate-400 border-r border-slate-800">
+        <aside className="w-64 shrink-0 flex flex-col bg-slate-950 min-h-screen text-slate-400 border-r border-slate-800">
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-10 overflow-hidden">
                     <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-slate-950 shrink-0">

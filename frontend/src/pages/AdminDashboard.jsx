@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLocation, Link } from 'react-router-dom';
 import AdminSidebar from '../components/admin/AdminSidebar';
+import AppShell from '../components/layout/AppShell';
 import { mockAdminDashboard } from '../mocks/adminDashboard';
 
 // Sub-components
@@ -59,10 +60,7 @@ const AdminDashboard = () => {
     const showBackButton = currentPath !== '/admin/dashboard' && currentPath !== '/admin';
 
     return (
-        <div className="flex bg-slate-50 min-h-screen font-sans w-full">
-            <AdminSidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<AdminSidebar />} className="bg-slate-50 font-sans">
                 {/* ADMIN TOP NAVBAR */}
                 <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 relative z-30">
                     <div className="flex items-center gap-2">
@@ -289,8 +287,7 @@ const AdminDashboard = () => {
                         return <div>Route not configured</div>;
                     })()}
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

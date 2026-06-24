@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import AppShell from '../components/layout/AppShell';
 import TopNavbar from '../components/TopNavbar';
 import PageHeader from '../components/common/PageHeader';
 import { mockAIAssistantData } from '../mocks/aiAssistant';
@@ -61,13 +62,10 @@ const AIAssistant = () => {
     };
 
     return (
-        <div className="flex bg-background min-h-screen">
-            <Sidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<Sidebar />}>
                 <TopNavbar />
 
-                <main className="flex-1 flex flex-col overflow-hidden">
+                <main className="flex-1 flex flex-col overflow-hidden min-w-0">
                     <div className="p-4 md:p-8 border-b border-slate-100 bg-white">
                         <PageHeader 
                             title="AI Career Assistant" 
@@ -139,8 +137,7 @@ const AIAssistant = () => {
                         </div>
                     </div>
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

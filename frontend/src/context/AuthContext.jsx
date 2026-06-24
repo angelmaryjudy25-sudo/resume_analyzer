@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import api from '../api/axios';
 
 const AuthContext = createContext();
@@ -6,7 +6,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [accessToken, setAccessToken] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [authInitialized, setAuthInitialized] = useState(false);
 
     const login = async (username, password) => {
         const response = await api.post('/login/', { username, password });
@@ -15,6 +16,8 @@ export const AuthProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${response.data.access}` }
         });
         setUser(profile.data);
+        setAuthInitialized(true);
+        return profile.data;
     };
 
     const register = async (userData) => {
@@ -23,9 +26,11 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await api.post('/logout/', {}, {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            });
+            if (accessToken) {
+                await api.post('/logout/', {}, {
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                });
+            }
         } finally {
             setUser(null);
             setAccessToken(null);
@@ -33,36 +38,32 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refresh = async () => {
-        try {
-            const response = await api.post('/token/refresh/');
-            setAccessToken(response.data.access);
-            const profile = await api.get('/profile/', {
-                headers: { Authorization: `Bearer ${response.data.access}` }
-            });
-            setUser(profile.data);
-            return response.data.access;
-        } catch (error) {
-            setUser(null);
-            setAccessToken(null);
-            throw error;
-        }
+        const response = await api.post('/token/refresh/');
+        setAccessToken(response.data.access);
+        const profile = await api.get('/profile/', {
+            headers: { Authorization: `Bearer ${response.data.access}` }
+        });
+        setUser(profile.data);
+        return response.data.access;
     };
 
-    useEffect(() => {
-        const initAuth = async () => {
-            try {
-                await refresh();
-            } catch (err) {
-                // Not logged in or refresh expired
-            } finally {
-                setLoading(false);
-            }
-        };
-        initAuth();
-    }, []);
+    /** Call only on recruiter/admin routes or login/register — not on candidate flow. */
+    const initAuth = useCallback(async () => {
+        if (authInitialized) return;
+        setLoading(true);
+        try {
+            await refresh();
+        } catch {
+            setUser(null);
+            setAccessToken(null);
+        } finally {
+            setAuthInitialized(true);
+            setLoading(false);
+        }
+    }, [authInitialized]);
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, login, register, logout, refresh, loading }}>
+        <AuthContext.Provider value={{ user, accessToken, login, register, logout, refresh, initAuth, loading, authInitialized }}>
             {children}
         </AuthContext.Provider>
     );

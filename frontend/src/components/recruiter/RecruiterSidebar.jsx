@@ -17,7 +17,7 @@ const RecruiterSidebar = () => {
     ];
 
     return (
-        <aside className="w-72 bg-slate-900 min-h-screen flex flex-col text-slate-300">
+        <aside className="w-72 shrink-0 flex flex-col bg-slate-900 min-h-screen text-slate-300">
             <div className="p-8">
                 <div className="flex items-center gap-3 mb-10">
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">

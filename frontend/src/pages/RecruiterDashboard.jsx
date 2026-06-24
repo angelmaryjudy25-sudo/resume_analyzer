@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLocation, Link } from 'react-router-dom';
 import RecruiterSidebar from '../components/recruiter/RecruiterSidebar';
+import AppShell from '../components/layout/AppShell';
 import { motion } from 'framer-motion';
 import { Bell, User, Search, Settings, ArrowLeft } from 'lucide-react';
 
@@ -45,10 +46,7 @@ const RecruiterDashboard = () => {
     const showBackButton = currentPath !== '/recruiter/dashboard';
 
     return (
-        <div className="flex bg-slate-50 min-h-screen font-sans w-full">
-            <RecruiterSidebar />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <AppShell sidebar={<RecruiterSidebar />} className="bg-slate-50 font-sans">
                 {/* RECRUITER TOP NAVBAR */}
                 <header className="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 relative z-20">
                     <div className="flex-1 max-w-xl relative">
@@ -192,8 +190,7 @@ const RecruiterDashboard = () => {
                         return <div>Not configured</div>;
                     })()}
                 </main>
-            </div>
-        </div>
+        </AppShell>
     );
 };
 

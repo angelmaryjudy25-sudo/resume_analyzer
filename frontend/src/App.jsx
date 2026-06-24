@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import RequireRecruiterAuth from './components/RequireRecruiterAuth';
 import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import CandidateDashboard from './pages/CandidateDashboard';
 import RecruiterDashboard from './pages/RecruiterDashboard';
 import CandidateRanking from './pages/CandidateRanking';
 import RecruiterAnalytics from './pages/RecruiterAnalytics';
@@ -17,15 +17,18 @@ import CareerRoadmap from './pages/CareerRoadmap';
 import AIAssistant from './pages/AIAssistant';
 import './index.css';
 
-const HomeRouter = () => {
-  const { user, loading } = useAuth();
+const Home = () => <Landing />;
 
-  if (loading) return <div className="hero"><h1>Loading...</h1></div>;
-  
-  if (!user) return <Landing />;
-  
-  if (user.role === 'admin') return <AdminDashboard />;
-  return user.role === 'recruiter' ? <RecruiterDashboard /> : <CandidateDashboard />;
+const AuthPage = ({ children }) => {
+    const { initAuth, authInitialized } = useAuth();
+
+    useEffect(() => {
+        if (!authInitialized) {
+            initAuth();
+        }
+    }, [authInitialized, initAuth]);
+
+    return children;
 };
 
 function App() {
@@ -34,34 +37,37 @@ function App() {
       <Router>
         <div className="min-h-screen flex flex-col bg-slate-950">
           <Routes>
-            <Route path="/" element={<HomeRouter />} />
+            <Route path="/" element={<Home />} />
+
+            {/* Candidate routes — no auth required */}
             <Route path="/candidate/resume-analysis" element={<ResumeAnalysis />} />
             <Route path="/candidate/job-match" element={<JobMatching />} />
             <Route path="/candidate/job-ranking" element={<JobRanking />} />
             <Route path="/candidate/career-roadmap" element={<CareerRoadmap />} />
             <Route path="/candidate/ai-assistant" element={<AIAssistant />} />
-            {/* Recruiter Routes */}
-            <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
-            <Route path="/recruiter/candidates" element={<RecruiterDashboard />} />
-            <Route path="/recruiter/jd" element={<RecruiterDashboard />} />
-            <Route path="/recruiter/ai-insights" element={<RecruiterDashboard />} />
-            <Route path="/recruiter/ranking" element={<CandidateRanking />} />
-            <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<AdminDashboard />} />
-            <Route path="/admin/candidates" element={<AdminDashboard />} />
-            <Route path="/admin/recruiters" element={<AdminDashboard />} />
-            <Route path="/admin/jobs" element={<AdminDashboard />} />
-            <Route path="/admin/models" element={<AdminDashboard />} />
-            <Route path="/admin/analytics" element={<AdminDashboard />} />
-            <Route path="/admin/health" element={<AdminDashboard />} />
-            <Route path="/admin/audit" element={<AdminDashboard />} />
+            {/* Recruiter Routes — JWT required */}
+            <Route path="/recruiter/dashboard" element={<RequireRecruiterAuth><RecruiterDashboard /></RequireRecruiterAuth>} />
+            <Route path="/recruiter/candidates" element={<RequireRecruiterAuth><RecruiterDashboard /></RequireRecruiterAuth>} />
+            <Route path="/recruiter/jd" element={<RequireRecruiterAuth><RecruiterDashboard /></RequireRecruiterAuth>} />
+            <Route path="/recruiter/ai-insights" element={<RequireRecruiterAuth><RecruiterDashboard /></RequireRecruiterAuth>} />
+            <Route path="/recruiter/ranking" element={<RequireRecruiterAuth><CandidateRanking /></RequireRecruiterAuth>} />
+            <Route path="/recruiter/analytics" element={<RequireRecruiterAuth><RecruiterAnalytics /></RequireRecruiterAuth>} />
 
-            {/* Auth and Fallbacks */}
-            <Route path="/login" element={<><Navbar /><Login /></>} />
-            <Route path="/register" element={<><Navbar /><Register /></>} />
+            {/* Admin Routes — JWT required */}
+            <Route path="/admin/dashboard" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/users" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/candidates" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/recruiters" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/jobs" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/models" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/analytics" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/health" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+            <Route path="/admin/audit" element={<RequireRecruiterAuth roles={['admin']}><AdminDashboard /></RequireRecruiterAuth>} />
+
+            {/* Auth pages — restore session if cookie exists */}
+            <Route path="/login" element={<AuthPage><Navbar /><Login /></AuthPage>} />
+            <Route path="/register" element={<AuthPage><Navbar /><Register /></AuthPage>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
@@ -69,11 +75,5 @@ function App() {
     </AuthProvider>
   );
 }
-
-
-
-
-
-
 
 export default App;
