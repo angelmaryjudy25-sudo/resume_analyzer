@@ -9,7 +9,7 @@ import { UserManagementTable } from '../components/admin/AdminManagementTables';
 import { AIModelMonitor, SystemHealthPanel } from '../components/admin/AIAndHealth';
 import { AuditLogsTable, PlatformAnalytics } from '../components/admin/AuditAndAnalytics';
 import { AdminActionsPanel, NotificationCenter } from '../components/admin/AdminPanels';
-import { Bell, User, Search, Settings, ShieldToggle, SearchCode } from 'lucide-react';
+import { Bell, User, Search, Settings, ShieldCheck, SearchCode } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AdminDashboard = () => {
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
                         </div>
                         <div className="h-4 w-[1px] bg-slate-200 mx-2" />
                         <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 uppercase tracking-tighter">
-                            <ShieldToggle size={14} className="text-primary" />
+                            <ShieldCheck size={14} className="text-primary" />
                             Security Protocol: Active
                         </div>
                     </div>

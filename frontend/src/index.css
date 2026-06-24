@@ -1,27 +1,62 @@
 @import "tailwindcss";
 
-@layer base {
-  body {
-    @apply bg-background text-dark antialiased;
+@theme {
+  --color-primary: #4F46E5;
+  --color-secondary: #7C3AED;
+  --color-accent: #06B6D4;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-background: #F8FAFC;
+  --color-dark: #0F172A;
+
+  --font-sans: "Inter", "system-ui", "sans-serif";
+
+  --shadow-premium: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-premium-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+@utility btn-saas {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s transform;
+  &:active {
+    transform: scale(0.95);
+  }
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
   }
 }
 
-@layer components {
-  .btn-saas {
-    @apply px-4 py-2 rounded-lg font-semibold transition-all duration-200 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50;
-  }
-  
-  .premium-card {
-    @apply bg-white border border-slate-200 shadow-premium rounded-xl overflow-hidden transition-all duration-300;
-  }
+@utility premium-card {
+  background-color: white;
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-premium);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s;
+}
 
-  .premium-card-hover {
-    @apply hover:shadow-premium-hover hover:border-slate-300;
+@utility premium-card-hover {
+  &:hover {
+    box-shadow: var(--shadow-premium-hover);
+    border-color: var(--color-slate-300);
   }
+}
 
-  .skeleton {
-    @apply bg-slate-200 animate-pulse rounded;
-  }
+@utility skeleton {
+  background-color: var(--color-slate-200);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: 0.25rem;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom Scrollbar */
@@ -29,11 +64,12 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-background;
+  background: var(--color-background);
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full;
+  background: var(--color-slate-300);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
+  background: var(--color-slate-400);
 }
