@@ -10,7 +10,7 @@ const Landing = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <h1 className="text-6xl font-black mb-6 bg-gradient-to-r from-primary-400 via-cyan-400 to-indigo-500 bg-clip-text text-transparent">
+                <h1 className="text-6xl font-black mb-6 bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 bg-clip-text text-transparent">
                     AI Resume Analyzer
                 </h1>
                 <p className="text-slate-400 text-xl max-w-2xl mb-10 leading-relaxed">

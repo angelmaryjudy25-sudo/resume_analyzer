@@ -8,7 +8,7 @@ import ScoreRing from '../components/common/ScoreRing';
 import ResumeUploader from '../components/ResumeUploader';
 import { mockDashboardData } from '../mocks/candidateDashboard';
 import { motion } from 'framer-motion';
-import { History, FileText, ChevronRight, MapPin, Map } from 'lucide-react';
+import { History, FileText, ChevronRight, MapPin, Map, Target } from 'lucide-react';
 
 const CandidateDashboard = () => {
     const [loading, setLoading] = useState(true);

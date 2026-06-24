@@ -9,7 +9,8 @@ import {
     Settings, 
     Menu, 
     X,
-    LogOut
+    LogOut,
+    Target
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -35,9 +36,9 @@ const Sidebar = () => {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
         { icon: FileText, label: 'Resume Analysis', path: '/candidate/resume-analysis' },
         { icon: Briefcase, label: 'Job Matching', path: '/candidate/job-match' },
-        { icon: Map, label: 'Career Roadmap', path: '/roadmap' },
-        { icon: MessageSquare, label: 'AI Assistant', path: '/ai' },
-        { icon: Settings, label: 'Settings', path: '/settings' },
+        { icon: Target, label: 'Job Ranking', path: '/candidate/job-ranking' },
+        { icon: Map, label: 'Career Roadmap', path: '/candidate/career-roadmap' },
+        { icon: MessageSquare, label: 'AI Assistant', path: '/candidate/ai-assistant' },
     ];
 
     const handleLogout = async () => {

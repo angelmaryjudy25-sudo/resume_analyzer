@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { ShieldCheck, Mail, Lock, LogIn } from 'lucide-react';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -20,23 +21,69 @@ const Login = () => {
     };
 
     return (
-        <div className="auth-card">
-            <h2>Login</h2>
-            {error && <p style={{ color: '#ef4444' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input className="form-input" value={username} onChange={e => setUsername(e.target.value)} required />
+        <div className="flex-1 flex items-center justify-center p-6 bg-slate-950 relative overflow-hidden min-h-[calc(100vh-80px)]">
+            {/* Glowing background circles */}
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+
+            <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-8 rounded-2xl shadow-2xl relative z-10">
+                <div className="flex flex-col items-center mb-8">
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4 border border-primary/20">
+                        <ShieldCheck size={24} />
+                    </div>
+                    <h2 className="text-2xl font-black text-white tracking-tight">Welcome Back</h2>
+                    <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest font-black">Resume AI Platform</p>
                 </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input className="form-input" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-                </div>
-                <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>Login</button>
-            </form>
-            <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
-                Don't have an account? <Link to="/register" style={{ color: 'var(--primary)' }}>Register</Link>
-            </p>
+
+                {error && (
+                    <div className="mb-6 p-4 bg-danger/10 border border-danger/20 text-danger rounded-xl text-xs font-bold flex items-center gap-2">
+                        <span>⚠️</span> {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="block text-xs font-black text-slate-300 uppercase tracking-widest">Username</label>
+                        <div className="relative">
+                            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                            <input 
+                                className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-slate-500 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none" 
+                                placeholder="Enter your username"
+                                value={username} 
+                                onChange={e => setUsername(e.target.value)} 
+                                required 
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="block text-xs font-black text-slate-300 uppercase tracking-widest">Password</label>
+                        <div className="relative">
+                            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                            <input 
+                                className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-slate-500 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none" 
+                                type="password" 
+                                placeholder="••••••••"
+                                value={password} 
+                                onChange={e => setPassword(e.target.value)} 
+                                required 
+                            />
+                        </div>
+                    </div>
+
+                    <button 
+                        type="submit"
+                        className="w-full btn-saas bg-primary hover:bg-primary/90 text-white py-3 text-sm font-black flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                    >
+                        <LogIn size={16} />
+                        Login to Dashboard
+                    </button>
+                </form>
+
+                <p className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Don't have an account? <Link to="/register" className="text-primary hover:underline ml-1">Register</Link>
+                </p>
+            </div>
         </div>
     );
 };

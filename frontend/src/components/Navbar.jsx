@@ -13,7 +13,7 @@ const Navbar = () => {
 
     return (
         <nav className="border-b border-slate-800 bg-slate-950 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-            <Link to="/" className="text-2xl font-black bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">
+            <Link to="/" className="text-2xl font-black bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
                 Analyst
             </Link>
             <div className="flex gap-6 items-center">
@@ -25,7 +25,7 @@ const Navbar = () => {
                 ) : (
                     <>
                         <Link to="/login" className="text-slate-300 hover:text-white transition-colors">Login</Link>
-                        <Link to="/register" className="btn-saas bg-primary-600 text-white hover:bg-primary-500">Get Started</Link>
+                        <Link to="/register" className="btn-saas bg-primary hover:bg-primary/90 text-white">Get Started</Link>
                     </>
                 )}
             </div>

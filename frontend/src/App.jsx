@@ -40,10 +40,26 @@ function App() {
             <Route path="/candidate/job-ranking" element={<JobRanking />} />
             <Route path="/candidate/career-roadmap" element={<CareerRoadmap />} />
             <Route path="/candidate/ai-assistant" element={<AIAssistant />} />
+            {/* Recruiter Routes */}
             <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+            <Route path="/recruiter/candidates" element={<RecruiterDashboard />} />
+            <Route path="/recruiter/jd" element={<RecruiterDashboard />} />
+            <Route path="/recruiter/ai-insights" element={<RecruiterDashboard />} />
             <Route path="/recruiter/ranking" element={<CandidateRanking />} />
             <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
+
+            {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<AdminDashboard />} />
+            <Route path="/admin/candidates" element={<AdminDashboard />} />
+            <Route path="/admin/recruiters" element={<AdminDashboard />} />
+            <Route path="/admin/jobs" element={<AdminDashboard />} />
+            <Route path="/admin/models" element={<AdminDashboard />} />
+            <Route path="/admin/analytics" element={<AdminDashboard />} />
+            <Route path="/admin/health" element={<AdminDashboard />} />
+            <Route path="/admin/audit" element={<AdminDashboard />} />
+
+            {/* Auth and Fallbacks */}
             <Route path="/login" element={<><Navbar /><Login /></>} />
             <Route path="/register" element={<><Navbar /><Register /></>} />
             <Route path="*" element={<Navigate to="/" />} />
